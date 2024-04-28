@@ -1,34 +1,55 @@
-import React from 'react'
-import Card from './Card';
+import React, { useState } from "react";
+import Card from "./Card";
 
-const Cards=({courses})=> {
-  let allCourses=[];
+const Cards = (props) => {
+  let courses = props.courses;
+  let category = props.category;
+  console.log("printing data");
+
+  const [likedCourses, setLikedCourses] = useState([]);
 
   //returns you list of all courses from the received api responses
-  const getCourses=()=>{
-    Object.values(courses).forEach((courseCategory)=>{
-      courseCategory.for((course)=>{
-        allCourses.push(course);
-      })
-    })
-    return allCourses;
+  function getCourses() {
+    if (category === "All") {
+      let allCourses = [];
+      Object.values(courses).forEach((array) => {
+        array.forEach((courseData) => {
+          allCourses.push(courseData);
+        });
+        
+      });
+      return allCourses;
+    }
+    else{
+      return courses[category];
+    }
+   
+    
   }
   return (
-    <div>
+    <div className="flex flex-wrap justify-center gap-4 mb-4">
       {!courses ? (
         <div>
           <p>No data Found</p>
         </div>
-      ) :( getCourses().map((course)=>{
-        return <Card key={course.id} course={course}/>
-       }))}
+      ) : (
+        getCourses().map((course) => {
+          return (
+            <Card
+              key={course.id}
+              course={course}
+              likedCourses={likedCourses}
+              setLikedCourses={setLikedCourses}
+            />
+          );
+        })
+      )}
 
       {
-      // const getCourses:()=>any[]
-   
-  }
-  </div>
-  )
-}
+        // const getCourses:()=>any[]
+      }
+    </div>
+  );
+};
 
-export default Cards
+export default Cards;
